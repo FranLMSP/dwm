@@ -59,6 +59,14 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
+
+/* commands */
+static const char *upvol[] = { "amixer", "set", "Master", "2+", NULL };
+static const char *downvol[] = { "amixer", "set", "Master", "2-", NULL };
+
+// for muting/unmuting //
+static const char *mute[] = { "amixer", "-q", "set", "Master", "toggle", NULL };
+
 #include <X11/XF86keysym.h>
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -95,8 +103,11 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	// { MODKEY|ShiftMask,             XK_q,      quit,           {0} },
-	{ 0 , XF86XK_MonBrightnessUp,	spawn,	   SHCMD("xbacklight -inc 1") },
-	{ 0 , XF86XK_MonBrightnessDown,	spawn,	   SHCMD("xbacklight -dec 1") },
+	{ 0 , XF86XK_AudioMute,		spawn,	   {.v = mute} },
+	{ 0 , XF86XK_AudioRaiseVolume,	spawn,	   {.v = upvol} },
+	{ 0 , XF86XK_AudioLowerVolume,	spawn,	   {.v = downvol} },
+	{ 0 , XF86XK_MonBrightnessUp,	spawn,	   SHCMD("xbacklight -inc 2") },
+	{ 0 , XF86XK_MonBrightnessDown,	spawn,	   SHCMD("xbacklight -dec 2") },
 	{ 0 , XK_Print,                 spawn,	   SHCMD("maim ~/Pictures/Screenshots/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
 	{ShiftMask, XK_Print,           spawn,	   SHCMD("maim -s ~/Pictures/Screenshots/pic-sel-$(date '+%y%m%d-%H%M-%S').png") },
 };
